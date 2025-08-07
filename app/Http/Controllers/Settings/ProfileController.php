@@ -10,12 +10,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-
+use App\Services\UserSettingsService;
 class ProfileController extends Controller
 {
     /**
      * Show the user's profile settings page.
      */
+    protected $userSettingsService;
+    public function __construct(UserSettingsService $userSettingsService)
+    {
+        $this->userSettingsService=$userSettingsService;
+    }
+    public function uploadVideos(Request $request){
+        return $this->userSettingsService->uploadVideos($request);
+    }
     public function edit(Request $request): Response
     {
         return Inertia::render('settings/Profile', [

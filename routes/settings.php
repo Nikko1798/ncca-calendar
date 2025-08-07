@@ -18,4 +18,8 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/Appearance');
     })->name('appearance');
+   
+    Route::post('settings/upload-videos', [ProfileController::class, 'uploadVideos'])->name('profile.uploadVideos');
+ 
+    
 });

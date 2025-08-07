@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'provider',
+        'provider_user_id',
     ];
 
     /**
@@ -44,5 +46,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'created_by_id');
+    }
+    public function token()
+    {
+        return $this->hasOne(SocialToken::class, 'user_id');
     }
 }

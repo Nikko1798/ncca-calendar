@@ -191,8 +191,6 @@ html.dark{
   }
   
   .vuecal__body-wrap{
-    border: 1px solid #808080;
-    border-radius: 0 0 20px 20px;
     background-color: transparent;  
     color: white;
   }

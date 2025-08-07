@@ -82,6 +82,18 @@ const submit = () => {
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Log in
                 </Button>
+                 <!-- <a :href="route('socialite.redirectToProvider', {'provider': 'google'})"  class="login100-form-social-item flex-c-m bg2 m-r-5">
+                       
+                    <Button type="button" class="mt-4 w-full" :tabindex="5" :disabled="form.processing">
+                        google login
+                    </Button>
+                </a> -->
+
+                  <!-- <div class="login100-form-social flex-c-m">
+                        <a href="{{ route('socialite.redirectToProvider', ['provider' => 'google']) }}"  class="login100-form-social-item flex-c-m bg2 m-r-5">
+                            <i class="fa-brands fa-google"></i>
+                        </a>
+                    </div> -->
             </div>
 
             <div class="text-center text-sm text-muted-foreground">

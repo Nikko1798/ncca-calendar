@@ -14,6 +14,16 @@ const mainNavItems: NavItem[] = [
         href: 'dashboard',
         icon: LayoutGrid,
     },
+    {
+        title: 'Calendar',
+        href: 'events.CalendarView',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Videos',
+        href: 'videos-view.index',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

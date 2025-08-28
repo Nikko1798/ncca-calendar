@@ -45,16 +45,29 @@ const currentIndex = ref(0);
 const currentVideo = ref(toRaw(props.videos[currentIndex.value].file_location));
 // When video changes, reload and play it
 watch(() => currentVideo.value, (newVal, oldVal) => {
-  if(isVideo(currentVideo.value))
-  {
-    playVideo();
-  }
-  else{
-    setTimeout(() => {
-      currentIndex.value++;
-      currentVideo.value = props.videos[currentIndex.value].file_location;
-    }, 1000)
-  }
+  console.log(currentIndex.value)
+  
+   
+      if(isVideo(currentVideo.value))
+      {
+        playVideo();
+      }
+      else{
+        setTimeout(() => {
+          currentIndex.value++;
+          if(props.videos[currentIndex.value])
+          {
+            currentVideo.value = props.videos[currentIndex.value].file_location;
+          }
+         
+          else{
+            onVideoEnded()
+          }
+          
+        }, 1000)
+      }
+    
+  
 },{ immediate: true });
 
 function VideosEnded(){

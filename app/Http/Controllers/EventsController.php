@@ -33,6 +33,10 @@ class EventsController extends Controller
         
         // return $events;
     }
+    public function getEvents(){
+        $events=$this->eventService->storeEventsFromGoogleCalendar();
+        return $events;
+    }
     public function CalendarView(){
         $events=$this->eventService->storeEventsFromGoogleCalendar();
        

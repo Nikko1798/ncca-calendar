@@ -2,13 +2,13 @@
     <div class="p-10" >
       
       <p class="text-2xl font-bold mb-2" data-aos="fade-right" >Events for the week</p>
-        <div class="space-y-2"  >
-          <div v-for="item in formattedEvents" :key="item.title" class="p-5" data-aos="fade-right">
+        <div class="grid grid-cols-2 gap-2 "  >
+          <div v-for="item in formattedEvents" :key="item.title" class="p-5 " data-aos="fade-right">
                   <!-- {{ item.title }} -->
-            <Card class="w-1/2] border border-gray-300  ">
+            <Card class="w-1/2] border border-gray-300 bg-blue-600 text-white ">
                 <CardHeader>
                   <CardTitle>{{ item.title }}</CardTitle>
-                  <CardDescription>{{ item.formattedStart }} - {{ item.formatedDateEnd }}.</CardDescription>
+                  <CardDescription class="text-white">{{ item.formattedStart }} - {{ item.formatedDateEnd }}.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <!-- <h4><b>Attendees</b> {{ item.attendees.length>1 ? item.attendees.length: 1 }}</h4> -->
@@ -27,6 +27,7 @@
     </div>
 </template>
 <script setup >
+import axios from 'axios'
 import VideoPlayer from './VideoPlayer.vue'
 import {ref, onMounted, toRaw, onBeforeUnmount, computed} from 'vue'
 import { Badge } from '@/components/ui/badge'
@@ -43,8 +44,8 @@ import 'aos/dist/aos.css'
 const props=defineProps({
     rawEvents: Array
 })
-
-const groupSize = 1
+const eventsData=ref([])
+const groupSize = 4
 const currentIndex = ref(0)
 let interval = null
 const emit = defineEmits(['goto-component'])
@@ -67,7 +68,7 @@ const getEndOfTheWeek=(()=>{
   return endOfWeek;
 })
 const visibleEvents = computed(() => {
-  const filtered = props.rawEvents.filter(event => {
+  const filtered = eventsData.value.filter(event => {
     const eventDate = new Date(event.start)
     return eventDate >= getStartOfWeek() && eventDate <= getEndOfTheWeek()
   })
@@ -75,7 +76,7 @@ const visibleEvents = computed(() => {
   return filtered.slice(start, start + groupSize)
 })
 const AllEventsForTheWeekSize=computed(()=>{
-  const filtered = props.rawEvents.filter(event => {
+  const filtered = eventsData.value.filter(event => {
     const eventDate = new Date(event.start)
     return eventDate >= getStartOfWeek() && eventDate <= getEndOfTheWeek()
   })
@@ -140,4 +141,22 @@ onBeforeUnmount(() => {
   clearInterval(interval)
 })
 
+
+onMounted(async ()=>{
+  const data = await getEvents();
+  eventsData.value=data;
+  console.log(data); // logs actual data
+})
+const getEvents=async ()=>{
+  return axios.get(route('calendar-events.all'))
+  .then((response) => {
+      return response.data
+  })
+  .catch((error) => {
+    console.log(error);
+    let errorStr=getErrorStr(error.response.data.errors);
+      warning(errorStr)
+      return error;
+  });
+}
 </script>

@@ -37,7 +37,14 @@ Route::prefix('events')->group(function () {
 
     Route::middleware('auth')->group(function () {
         Route::get('/CalendarView', [EventsController::class, 'CalendarView'])->name('events.CalendarView');
-    });
+        });
+
+    
+});
+
+Route::prefix('calendar-events')->group(function () {
+      Route::get('/all', [EventsController::class, 'getEvents'])->name('calendar-events.all');
+  
 });
 
 // 

@@ -20,7 +20,7 @@
      
      @view-change="onViewChange"
      @cell-click="onCellClick"
-        :events="rawEvents"
+        :events="events"
         events-on-month-view
         :views="{ days: { cols: 5, rows: 1 }, month: {} }"
         view="month"
@@ -29,16 +29,17 @@
   </div>
 </template>
 <script setup>
-
+import axios from 'axios';
 import { VueCal } from 'vue-cal'
 import 'vue-cal/style'
 import { useCalendarService } from '@/services/calendar-service'
-import { onMounted, toRaw } from 'vue'
+import { onMounted, toRaw, ref } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 const props=defineProps({
   rawEvents: Array
 })
+const events=ref([]);
 onMounted(()=>{
   AOS.init()
 })
@@ -59,4 +60,22 @@ const onViewChange = view => {
   // alert(view.start.format())
   console.log(formatted)
 }
+onMounted(async ()=>{
+  const data = await getEvents();
+  events.value=data;
+  console.log(data); // logs actual data
+})
+const getEvents=async ()=>{
+  return axios.get(route('calendar-events.all'))
+  .then((response) => {
+      return response.data
+  })
+  .catch((error) => {
+    console.log(error);
+    let errorStr=getErrorStr(error.response.data.errors);
+      warning(errorStr)
+      return error;
+  });
+}
+
 </script>

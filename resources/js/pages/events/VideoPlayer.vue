@@ -10,14 +10,14 @@
     playsinline
     @ended="onVideoEnded"
   >
-    <source :src="`/ncca-calendar/medias/${currentVideo}`" type="video/mp4" />
-    <source :src="`/ncca-calendar/medias/${currentVideo}`" type="video/ogg" />
+    <source :src="`${currentVideo}`" type="video/mp4" />
+    <source :src="`${currentVideo}`" type="video/ogg" />
     Your browser does not support the video tag.
   </video>
   
   <img
   v-else
-  :src="`/ncca-calendar/medias/${currentVideo}`"
+  :src="`${currentVideo}`"
   alt="Media"
   class="w-full h-screen object-contain mx-auto block"
 />
@@ -42,10 +42,10 @@ onMounted(() => {
 
 const videoRef = ref(null);
 const currentIndex = ref(0);
-const currentVideo = ref(toRaw(props.videos[currentIndex.value].file_location));
+const currentVideo = ref(toRaw(props.videos[currentIndex.value].completeVidUrl));
 // When video changes, reload and play it
 watch(() => currentVideo.value, (newVal, oldVal) => {
-  console.log(currentIndex.value)
+  console.log(props.videos[currentIndex.value].completeVidUrl)
   
    
       if(isVideo(currentVideo.value))
@@ -57,7 +57,7 @@ watch(() => currentVideo.value, (newVal, oldVal) => {
           currentIndex.value++;
           if(props.videos[currentIndex.value])
           {
-            currentVideo.value = props.videos[currentIndex.value].file_location;
+            currentVideo.value = props.videos[currentIndex.value].completeVidUrl;
           }
          
           else{
@@ -76,11 +76,11 @@ function VideosEnded(){
 function onVideoEnded() {
   if (currentIndex.value < props.videos.length - 1) {
     currentIndex.value++;
-    currentVideo.value = props.videos[currentIndex.value].file_location;
+    currentVideo.value = props.videos[currentIndex.value].completeVidUrl;
   } else {
     // Optionally restart or stop
     currentIndex.value = 0;
-    currentVideo.value = props.videos[0].file_location;
+    currentVideo.value = props.videos[0].completeVidUrl;
     VideosEnded();
   }
   

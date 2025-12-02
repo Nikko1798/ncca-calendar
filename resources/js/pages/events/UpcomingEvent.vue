@@ -28,6 +28,8 @@
 </template>
 <script setup >
 import axios from 'axios'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import VideoPlayer from './VideoPlayer.vue'
 import {ref, onMounted, toRaw, onBeforeUnmount, computed} from 'vue'
 import { Badge } from '@/components/ui/badge'

@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+
 const passwordInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
@@ -31,7 +32,8 @@ const closeModal = () => {
     form.reset();
 };
 const fetchAuthUrl = async () => {
-  const res = await axios.get('/ncca-calendar/google/auth')
+//   const res = await axios.get('/ncca-calendar/google/auth')
+const res = await axios.get(route('google.auth'))
   window.location.href = res.data.authUrl
 }
 </script>

@@ -11,7 +11,7 @@ class GoogleCalendarService
     {
         $client = new Google_Client();
         $client->setAuthConfig(storage_path('app/client_secret.json'));
-        $client->setRedirectUri('http://localhost:8080/ncca-calendar/auth/google/callback');
+        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
         $client->addScope(Google_Service_Calendar::CALENDAR_READONLY);
         $client->setAccessType('offline');
         $client->setPrompt('consent');

@@ -15,7 +15,7 @@ Route::get('/google/auth', function (GoogleCalendarService $calendar) {
     return response()->json([
         'authUrl' => $calendar->getAuthUrl()
     ]);
-});
+})->name('google.auth');
 
 Route::get('/auth/google/callback', function (GoogleCalendarService $calendar) {
     $token = $calendar->fetchToken(request('code'));

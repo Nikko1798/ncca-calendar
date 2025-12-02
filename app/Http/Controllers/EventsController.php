@@ -26,8 +26,12 @@ class EventsController extends Controller
     public function index($floor){
         $events=$this->eventService->storeEventsFromGoogleCalendar();
         $videos=Video::where('floor', $floor)->get();
+        $mappedVid=$videos->map(function ($item){
+            $item->completeVidUrl = '/'. env('BUILD_APPNAME') . "/medias/" . $item->file_location;
+            return $item;
+        });
         return Inertia::render('events/Index', [
-            'events'=>$events,
+            'events'=>$mappedVid,
             'videos'=>$videos
         ]);
         

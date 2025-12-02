@@ -4,6 +4,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 
 import Calendar from './Calendar.vue';
+import { onMounted } from 'vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Calendar',
@@ -12,6 +13,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
  const props = defineProps({
     events: Array // or Array if it's a list
+})
+
+onMounted(()=>{
+    
 })
 </script>
 

@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    base: '/kultura-calendar/build/',
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],

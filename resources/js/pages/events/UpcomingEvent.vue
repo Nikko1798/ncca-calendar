@@ -39,8 +39,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 const props=defineProps({
     rawEvents: Array
 })

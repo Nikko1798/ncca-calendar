@@ -36,6 +36,7 @@ import { useCalendarService } from '@/services/calendar-service'
 import { onMounted, toRaw, ref } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import { route } from '../../../../vendor/tightenco/ziggy/src/js';
 const props=defineProps({
   rawEvents: Array
 })
@@ -66,7 +67,7 @@ onMounted(async ()=>{
   console.log(data); // logs actual data
 })
 const getEvents=async ()=>{
-  return axios.get(route('calendar-events.all'))
+  return axios.get(route('google.auth'))
   .then((response) => {
       return response.data
   })

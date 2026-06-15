@@ -4,19 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-
+import {route} from 'ziggy-js';
 const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
-        href: '/settings/profile',
+        href: 'profile.edit',
     },
     {
         title: 'Password',
-        href: '/settings/password',
+        href: 'password.edit',
     },
     {
         title: 'Appearance',
-        href: '/settings/appearance',
+        href: 'appearance',
     },
 ];
 
@@ -39,7 +39,7 @@ const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.locati
                         :class="['w-full justify-start', { 'bg-muted': currentPath === item.href }]"
                         as-child
                     >
-                        <Link :href="item.href">
+                        <Link :href="route(item.href)">
                             {{ item.title }}
                         </Link>
                     </Button>

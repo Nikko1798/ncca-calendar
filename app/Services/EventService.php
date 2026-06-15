@@ -12,38 +12,47 @@ use Illuminate\Support\Collection;
 use Carbon\Carbon;
 class EventService
 {
-    function storeEventsFromGoogleCalendar(){
-        $token=SocialToken::where('user_id', 1)->first();
-        $unAuth=false;
-        try{
-            //cache remember only stores the response in cache if it doesn't already exist.
-            $events = Cache::remember("calendar_events_{$token->created_at}", now()->addMinutes(1), function () use ($token) {
-    
-                $response = Http::withToken(($token->access_token))
-                ->get('https://www.googleapis.com/calendar/v3/calendars/primary/events');
+   function storeEventsFromGoogleCalendar()
+    {
+        $token = SocialToken::where('user_id', 1)->first();
 
-                if ($response->unauthorized()) {
-                    $result=self::refreshGoogleCalendarToken($token);
-                    $unAuth = $result['success'];
-                    return $unAuth;
+        if (!$token) {
+            abort(401, 'No Google token found.');
+        }
+
+        try {
+            $events = Cache::remember(
+                "calendar_events_user_{$token->user_id}",
+                now()->addMinutes(1),
+                function () use ($token) {
+
+                    $response = Http::withToken($token->access_token)
+                        ->get('https://www.googleapis.com/calendar/v3/calendars/primary/events');
+
+                    if (!$response->successful()) {
+                        // don't return Response here
+                        return null;
+                    }
+
+                    return $response->json();
                 }
-                else{
+            );
 
-                    $events = $response->json();
-                    return $events;
-                }
-            });
+            if (!$events || !isset($events['items'])) {
+                return collect([]);
+            }
 
-            $mappedEvents = collect($events['items'])->map(function ($event) {
+            return collect($events['items'])->map(function ($event) {
                 $start = $event['start']['dateTime'] ?? null;
                 $end = $event['end']['dateTime'] ?? null;
+
                 return [
-                    'attendees' => $event['attendees'] ?? null,
+                    'attendees' => $event['attendees'] ?? [],
                     'start' => $start
-                        ? Carbon::parse($start)->timezone('Asia/Singapore')->format('D M d Y H:i:s \G\M\TP T')
+                        ? Carbon::parse($start)->timezone('Asia/Singapore')->format('D M d Y H:i:s')
                         : 'No Start Date',
                     'end' => $end
-                        ? Carbon::parse($end)->timezone('Asia/Singapore')->format('D M d Y H:i:s \G\M\TP T')
+                        ? Carbon::parse($end)->timezone('Asia/Singapore')->format('D M d Y H:i:s')
                         : 'No End Date',
                     'title' => $event['summary'] ?? 'Untitled Event',
                     'content' => '<i class="icon mdi mdi-stethoscope"></i>',
@@ -54,27 +63,10 @@ class EventService
                     ],
                 ];
             });
-
-            // return self::refreshGoogleCalendarToken($token)["success"];
-            return $mappedEvents;
-
+        } catch (\Exception $e) {
+            report($e);
+            return collect([]);
         }
-        catch(Exception $e)
-        {
-            return $e->getMessage();
-        }
-        // $events=self::refreshGoogleCalendarToken($token);
-      
-        // // return $mappedEvents;
-        // if ($response->unauthorized()) {
-        //     return $mappedEvents;
-        // }
-        // else{
-
-        //     $events = $response->json();
-        //     return $events;
-        // }
-        
     }
 
      function refreshGoogleCalendarToken($token){

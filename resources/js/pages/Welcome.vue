@@ -5,7 +5,7 @@ import {
 } from '@/components/ui/card'
 
 import { Button } from '@/components/ui/button'
-import { Building2, ArrowRight } from 'lucide-vue-next'
+import { Building2, ArrowRight, Building } from 'lucide-vue-next'
 import GuestLayout from '@/layouts/GuestLayout.vue';
 
 const floors = [
@@ -62,16 +62,18 @@ const props = withDefaults(defineProps<{
 
                 <!-- Floor Grid -->
                 <div
-                    class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
+                    class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5"
                 >
                     <Card
                         v-for="(item, index) in videos" :key="index"
-                        class="group overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+                        class="group overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl
+                         border-t-10 border-primary"
                     >
                         <CardContent
-                            class="flex aspect-square flex-col items-center justify-center p-6 text-center"
+                            class="flex 
+                            flex-col"
                         >
-                            <div
+                            <!-- <div
                                 class="mb-4 rounded-full bg-muted text-muted-foreground p-4"
                             >
                                 <Building2
@@ -92,7 +94,29 @@ const props = withDefaults(defineProps<{
                                     View
                                     <ArrowRight class="ml-2 h-4 w-4" />
                                 </Button>
-                            </a>
+                            </a> -->
+                            <div class="flex flex-col gap-2">
+                                <div class="grid grid-cols-[40%_60%] gap-2 items-center">
+                                    <div class="flex flex-col">
+                                        <Label>Floor</Label>
+                                        <Label class="font-bold text-primary text-7xl">{{ item.floor }}</Label>
+                                    </div>
+                                    <div class="flex flex-col">
+                                       <Building class="h-20 w-20 text-primary" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                     <a :href="route('events.index', item.floor)">
+                                        <Button
+                                            class="mt-6 w-full cursor-pointer"
+                                            variant="outline"
+                                        >
+                                            View
+                                            <ArrowRight class="ml-2 h-4 w-4" />
+                                        </Button>
+                                    </a> 
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
                 </div>

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Google_Client;
 use Google_Service_Calendar;
-
+use Google_Service_Drive;
 class GoogleCalendarService
 {
     public function client()
@@ -13,6 +13,7 @@ class GoogleCalendarService
         $client->setAuthConfig(storage_path('app/client_secret.json'));
         $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
         $client->addScope(Google_Service_Calendar::CALENDAR_READONLY);
+        $client->addScope(Google_Service_Drive::DRIVE_READONLY);
         $client->setAccessType('offline');
         $client->setPrompt('consent');
         return $client;
